@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="theme-color" content="#000000" />
+    <link
+      href="https://dogfood-current.notebooks-dev.azure.net/api/proxy/cdn/component/1/latest/aznb-bundle.css"
+      rel="stylesheet"
+    />
+    <script
+      type="text/javascript"
+      src="https://dogfood-current.notebooks-dev.azure.net/api/proxy/cdn/component/1/latest/aznb-bundle.js"
+    ></script>
+    <title>Azure Notebooks Bundle Test Page</title>
+    <link href="index.css" rel="stylesheet" />
+    <script type="text/javascript" src="testjs/scriptpath.js"></script>
+  </head>
+
+  <body>
+    <noscript> You need to enable JavaScript to run this app. </noscript>
+    <!-- Customer can set height to any value. Relative or Absolute and the component will work as expected. -->
+    <div id="notebook1"></div>
+    <script>
+      console.log(`Component version is ${AzureNotebooks.version}`);
+
+      var tokenProvider = null;
+      var nb = null;
+
+      const MarkInitStart = "init_start";
+      const MarkInitEnd = "init_end";
+      const MarkLoadStart = "loadNotebook_start";
+      const MarkLoadEnd = "loadNotebook_end";
+
+      async function initNotebook() {
+        performance.mark(MarkInitStart);
+        await AzureNotebooks.init({
+          userHasGivenCookieConsent: true,
+          getResourceIdAndKey: () =>
+            Promise.resolve({
+              notebookResourceId: "4c17fb88cbe248bc96cc4bb9e00d3eea",
+              notebookResourceKey:
+                "c85d8575e9164bf6b7b31e1d9f642d79a050bbbebb2c4663a0f9f0ce84218367",
+            }),
+          resourceUrl: "https://testResource.notebooks-dev.azure.net",
+        });
+        performance.mark(MarkInitEnd);
+      }
+
+      function getQueryParams() {
+        return Object.fromEntries(
+          new URLSearchParams(window.location.search).entries()
+        );
+      }
+
+      const params = getQueryParams();
+      async function loadNotebook1() {
+        const notebookUrl =
+          params.nb ||
+          "https://raw.githubusercontent.com/bryanchen-d/scratch/master/aznb/aznbc-demo.ipynb";
+
+        const options = {
+          parentElementId: "notebook1",
+          filePath: notebookUrl,
+          getNotebookStorageOptions: () =>
+            Promise.resolve({
+              requestOptions: null, // specify request options for the given url
+              token: "",
+            }),
+
+          config: {
+            readOnly: params.readonly === "true",
+            intelliSense: {
+              type: "LanguageServiceAndKernel",
+              languageServiceHost: "Compute",
+              languageServicePortOnCompute: 18881,
+              logPerformance: true,
+            },
+            disableAutoSave: true,
+            theme: params.theme || "light",
+            locale: params.locale || "en",
+            disableOutputIframe: params.disableOutputIframe || undefined,
+          },
+
+          handlers: {
+            intelliSense: {},
+          },
+        };
+
+        performance.mark(MarkLoadStart);
+
+        if (params.mode === "create") {
+          const contentResponse = await fetch(notebookUrl);
+          const content = await contentResponse.text();
+          const model = JSON.parse(content);
+          console.log(
+            `File Size ${
+              Math.round((content.length * 10.0) / 1024) / 10
+            }KB, # of Cells: ${model.cells.length}`
+          );
+
+          nb = await AzureNotebooks.createNotebook(options, content);
+        } else {
+          // load and render the notebook
+          nb = await AzureNotebooks.loadNotebook(options);
+        }
+
+        performance.mark(MarkLoadEnd);
+
+        var compute = {
+          name: "Jupyter on Localhost",
+          targetUrl: "http://localhost:8888",
+          getAuthSettings: () =>
+            Promise.resolve({
+              authType: "token",
+              token: "<your-jupyter-token>",
+            }),
+          shouldMount: false,
+          keepOldCompute: true,
+        };
+
+        await nb.setCompute({
+          targetSettings: compute,
+        });
+      }
+
+      async function unloadNotebook1() {
+        if (nb) {
+          nb.dispose();
+        }
+      }
+    </script>
+    <script>
+      const init = async () => {
+        document
+          .getElementById("notebook1")
+          .addEventListener("aznb-error", (error) => console.log(error));
+
+        await initNotebook();
+        await loadNotebook1();
+
+        performance.measure("init", MarkInitStart, MarkInitEnd);
+        performance.measure("loadNotebook", MarkLoadStart, MarkLoadEnd);
+
+        // Pull out all of the measurements.
+        performance.getEntriesByType("measure").forEach((measure) => {
+          console.log(
+            `Performance Measurement - '${measure.name}' duration: ${measure.duration}ms`
+          );
+        });
+
+        // Finally, clean up the entries.
+        [MarkInitStart, MarkInitEnd, MarkLoadStart, MarkLoadEnd].forEach((n) =>
+          performance.clearMarks(n)
+        );
+        ["init", "loadNotebook"].forEach((n) => performance.clearMeasures(n));
+      };
+      document.addEventListener("DOMContentLoaded", init, false);
+    </script>
+  </body>
+</html>

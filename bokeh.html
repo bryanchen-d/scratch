@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html theme="light">
+  <head>
+    <style>
+      html,
+      body {
+        margin: 0px;
+        font-family: Segoe UI, Segoe UI Light, Segoe WP, Tahoma, Arial,
+          sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="nteract-cell-outputs cell-code-outputs">
+      <div>
+        <div
+          class="bk-root"
+          id="e26e3488-568a-46ba-b81c-25f8fe414508"
+          data-root-id="1456"
+        ></div>
+      </div>
+      <div>
+        <div class="bk-root">
+          <a
+            href="https://bokeh.org"
+            target="_blank"
+            class="bk-logo bk-logo-small bk-logo-notebook"
+          ></a>
+          <span id="1213">Loading BokehJS ...</span>
+        </div>
+      </div>
+      <script>
+        (function (root) {
+          function now() {
+            return new Date();
+          }
+
+          var force = true;
+
+          if (
+            typeof root._bokeh_onload_callbacks === "undefined" ||
+            force === true
+          ) {
+            root._bokeh_onload_callbacks = [];
+            root._bokeh_is_loading = undefined;
+          }
+
+          if (typeof root._bokeh_timeout === "undefined" || force === true) {
+            root._bokeh_timeout = Date.now() + 5000;
+            root._bokeh_failed_load = false;
+          }
+
+          var NB_LOAD_WARNING = {
+            data: {
+              "text/html":
+                "<div style='background-color: #fdd'>\n" +
+                "<p>\n" +
+                "BokehJS does not appear to have successfully loaded. If loading BokehJS from CDN, this \n" +
+                "may be due to a slow or bad network connection. Possible fixes:\n" +
+                "</p>\n" +
+                "<ul>\n" +
+                "<li>re-rerun `output_notebook()` to attempt to load from CDN again, or</li>\n" +
+                "<li>use INLINE resources instead, as so:</li>\n" +
+                "</ul>\n" +
+                "<code>\n" +
+                "from bokeh.resources import INLINE\n" +
+                "output_notebook(resources=INLINE)\n" +
+                "</code>\n" +
+                "</div>",
+            },
+          };
+
+          function display_loaded() {
+            var el = document.getElementById("1213");
+            if (el != null) {
+              el.textContent = "BokehJS is loading...";
+            }
+            if (root.Bokeh !== undefined) {
+              if (el != null) {
+                el.textContent =
+                  "BokehJS " + root.Bokeh.version + " successfully loaded.";
+              }
+            } else if (Date.now() < root._bokeh_timeout) {
+              setTimeout(display_loaded, 100);
+            }
+          }
+
+          function run_callbacks() {
+            try {
+              root._bokeh_onload_callbacks.forEach(function (callback) {
+                if (callback != null) callback();
+              });
+            } finally {
+              delete root._bokeh_onload_callbacks;
+            }
+            console.debug("Bokeh: all callbacks have finished");
+          }
+
+          function load_libs(css_urls, js_urls, callback) {
+            if (css_urls == null) css_urls = [];
+            if (js_urls == null) js_urls = [];
+
+            root._bokeh_onload_callbacks.push(callback);
+            if (root._bokeh_is_loading > 0) {
+              console.debug(
+                "Bokeh: BokehJS is being loaded, scheduling callback at",
+                now()
+              );
+              return null;
+            }
+            if (js_urls == null || js_urls.length === 0) {
+              run_callbacks();
+              return null;
+            }
+            console.debug(
+              "Bokeh: BokehJS not loaded, scheduling load and callback at",
+              now()
+            );
+            root._bokeh_is_loading = css_urls.length + js_urls.length;
+
+            function on_load() {
+              root._bokeh_is_loading--;
+              if (root._bokeh_is_loading === 0) {
+                console.debug(
+                  "Bokeh: all BokehJS libraries/stylesheets loaded"
+                );
+                run_callbacks();
+              }
+            }
+
+            function on_error() {
+              console.error("failed to load " + url);
+            }
+
+            for (var i = 0; i < css_urls.length; i++) {
+              var url = css_urls[i];
+              const element = document.createElement("link");
+              element.onload = on_load;
+              element.onerror = on_error;
+              element.rel = "stylesheet";
+              element.type = "text/css";
+              element.href = url;
+              console.debug(
+                "Bokeh: injecting link tag for BokehJS stylesheet: ",
+                url
+              );
+              document.body.appendChild(element);
+            }
+
+            for (var i = 0; i < js_urls.length; i++) {
+              var url = js_urls[i];
+              var element = document.createElement("script");
+              element.onload = on_load;
+              element.onerror = on_error;
+              element.async = false;
+              element.src = url;
+              console.debug(
+                "Bokeh: injecting script tag for BokehJS library: ",
+                url
+              );
+              document.head.appendChild(element);
+            }
+          }
+          var element = document.getElementById("1213");
+          if (element == null) {
+            console.error(
+              "Bokeh: ERROR: autoload.js configured with elementid '1213' but no matching script tag was found. "
+            );
+            return false;
+          }
+
+          function inject_raw_css(css) {
+            const element = document.createElement("style");
+            element.appendChild(document.createTextNode(css));
+            document.body.appendChild(element);
+          }
+
+          var js_urls = [
+            "https://cdn.pydata.org/bokeh/release/bokeh-1.4.0.min.js",
+            "https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.4.0.min.js",
+            "https://cdn.pydata.org/bokeh/release/bokeh-tables-1.4.0.min.js",
+            "https://cdn.pydata.org/bokeh/release/bokeh-gl-1.4.0.min.js",
+          ];
+          var css_urls = [];
+
+          var inline_js = [
+            function (Bokeh) {
+              Bokeh.set_log_level("info");
+            },
+            function (Bokeh) {},
+          ];
+
+          function run_inline_js() {
+            if (root.Bokeh !== undefined || force === true) {
+              for (var i = 0; i < inline_js.length; i++) {
+                inline_js[i].call(root, root.Bokeh);
+              }
+              if (force === true) {
+                display_loaded();
+              }
+            } else if (Date.now() < root._bokeh_timeout) {
+              setTimeout(run_inline_js, 100);
+            } else if (!root._bokeh_failed_load) {
+              console.log(
+                "Bokeh: BokehJS failed to load within specified timeout."
+              );
+              root._bokeh_failed_load = true;
+            } else if (force !== true) {
+              var cell = $(document.getElementById("1213"))
+                .parents(".cell")
+                .data().cell;
+              cell.output_area.append_execute_result(NB_LOAD_WARNING);
+            }
+          }
+
+          if (root._bokeh_is_loading === 0) {
+            console.debug("Bokeh: BokehJS loaded, going straight to plotting");
+            run_inline_js();
+          } else {
+            load_libs(css_urls, js_urls, function () {
+              console.debug("Bokeh: BokehJS plotting callback run at", now());
+              run_inline_js();
+            });
+          }
+        })(window);
+      </script>
+      <script>
+        function __aznb_plot() {
+          (function (root) {
+            function embed_document(root) {
+              var docs_json = {
+                "6f64fb4b-6b2d-48fa-8cf6-6586d17ed8f0": {
+                  roots: {
+                    references: [
+                      {
+                        attributes: {
+                          below: [{ id: "1465", type: "LinearAxis" }],
+                          center: [
+                            { id: "1469", type: "Grid" },
+                            { id: "1474", type: "Grid" },
+                          ],
+                          left: [{ id: "1470", type: "LinearAxis" }],
+                          plot_height: 400,
+                          plot_width: 400,
+                          renderers: [{ id: "1491", type: "GlyphRenderer" }],
+                          title: { id: "1530", type: "Title" },
+                          toolbar: { id: "1481", type: "Toolbar" },
+                          x_range: { id: "1457", type: "DataRange1d" },
+                          x_scale: { id: "1461", type: "LinearScale" },
+                          y_range: { id: "1459", type: "DataRange1d" },
+                          y_scale: { id: "1463", type: "LinearScale" },
+                        },
+                        id: "1456",
+                        subtype: "Figure",
+                        type: "Plot",
+                      },
+                      {
+                        attributes: {
+                          data_source: { id: "1488", type: "ColumnDataSource" },
+                          glyph: { id: "1489", type: "Circle" },
+                          hover_glyph: null,
+                          muted_glyph: null,
+                          nonselection_glyph: { id: "1490", type: "Circle" },
+                          selection_glyph: null,
+                          view: { id: "1492", type: "CDSView" },
+                        },
+                        id: "1491",
+                        type: "GlyphRenderer",
+                      },
+                      {
+                        attributes: {
+                          fill_alpha: { value: 0.5 },
+                          fill_color: { value: "orange" },
+                          line_color: { value: "navy" },
+                          size: { units: "screen", value: 15 },
+                          x: { field: "x" },
+                          y: { field: "y" },
+                        },
+                        id: "1489",
+                        type: "Circle",
+                      },
+                      {
+                        attributes: {
+                          callback: null,
+                          data: { x: [1, 2, 3, 4, 5], y: [6, 7, 2, 4, 5] },
+                          selected: { id: "1536", type: "Selection" },
+                          selection_policy: {
+                            id: "1535",
+                            type: "UnionRenderers",
+                          },
+                        },
+                        id: "1488",
+                        type: "ColumnDataSource",
+                      },
+                      { attributes: {}, id: "1475", type: "PanTool" },
+                      {
+                        attributes: {
+                          source: { id: "1488", type: "ColumnDataSource" },
+                        },
+                        id: "1492",
+                        type: "CDSView",
+                      },
+                      { attributes: {}, id: "1476", type: "WheelZoomTool" },
+                      {
+                        attributes: { callback: null },
+                        id: "1457",
+                        type: "DataRange1d",
+                      },
+                      {
+                        attributes: {
+                          overlay: { id: "1537", type: "BoxAnnotation" },
+                        },
+                        id: "1477",
+                        type: "BoxZoomTool",
+                      },
+                      { attributes: {}, id: "1478", type: "SaveTool" },
+                      {
+                        attributes: {
+                          active_drag: "auto",
+                          active_inspect: "auto",
+                          active_multi: null,
+                          active_scroll: "auto",
+                          active_tap: "auto",
+                          tools: [
+                            { id: "1475", type: "PanTool" },
+                            { id: "1476", type: "WheelZoomTool" },
+                            { id: "1477", type: "BoxZoomTool" },
+                            { id: "1478", type: "SaveTool" },
+                            { id: "1479", type: "ResetTool" },
+                            { id: "1480", type: "HelpTool" },
+                          ],
+                        },
+                        id: "1481",
+                        type: "Toolbar",
+                      },
+                      {
+                        attributes: { callback: null },
+                        id: "1459",
+                        type: "DataRange1d",
+                      },
+                      { attributes: {}, id: "1535", type: "UnionRenderers" },
+                      {
+                        attributes: {
+                          formatter: { id: "1533", type: "BasicTickFormatter" },
+                          ticker: { id: "1466", type: "BasicTicker" },
+                        },
+                        id: "1465",
+                        type: "LinearAxis",
+                      },
+                      {
+                        attributes: {},
+                        id: "1531",
+                        type: "BasicTickFormatter",
+                      },
+                      { attributes: {}, id: "1480", type: "HelpTool" },
+                      { attributes: {}, id: "1479", type: "ResetTool" },
+                      {
+                        attributes: {},
+                        id: "1533",
+                        type: "BasicTickFormatter",
+                      },
+                      {
+                        attributes: {
+                          fill_alpha: { value: 0.1 },
+                          fill_color: { value: "#1f77b4" },
+                          line_alpha: { value: 0.1 },
+                          line_color: { value: "#1f77b4" },
+                          size: { units: "screen", value: 15 },
+                          x: { field: "x" },
+                          y: { field: "y" },
+                        },
+                        id: "1490",
+                        type: "Circle",
+                      },
+                      {
+                        attributes: {
+                          bottom_units: "screen",
+                          fill_alpha: { value: 0.5 },
+                          fill_color: { value: "lightgrey" },
+                          left_units: "screen",
+                          level: "overlay",
+                          line_alpha: { value: 1.0 },
+                          line_color: { value: "black" },
+                          line_dash: [4, 4],
+                          line_width: { value: 2 },
+                          render_mode: "css",
+                          right_units: "screen",
+                          top_units: "screen",
+                        },
+                        id: "1537",
+                        type: "BoxAnnotation",
+                      },
+                      { attributes: {}, id: "1461", type: "LinearScale" },
+                      { attributes: {}, id: "1463", type: "LinearScale" },
+                      {
+                        attributes: {
+                          dimension: 1,
+                          ticker: { id: "1471", type: "BasicTicker" },
+                        },
+                        id: "1474",
+                        type: "Grid",
+                      },
+                      { attributes: {}, id: "1536", type: "Selection" },
+                      {
+                        attributes: {
+                          ticker: { id: "1466", type: "BasicTicker" },
+                        },
+                        id: "1469",
+                        type: "Grid",
+                      },
+                      { attributes: { text: "" }, id: "1530", type: "Title" },
+                      { attributes: {}, id: "1466", type: "BasicTicker" },
+                      { attributes: {}, id: "1471", type: "BasicTicker" },
+                      {
+                        attributes: {
+                          formatter: { id: "1531", type: "BasicTickFormatter" },
+                          ticker: { id: "1471", type: "BasicTicker" },
+                        },
+                        id: "1470",
+                        type: "LinearAxis",
+                      },
+                    ],
+                    root_ids: ["1456"],
+                  },
+                  title: "Bokeh Application",
+                  version: "1.4.0",
+                },
+              };
+              var render_items = [
+                {
+                  docid: "6f64fb4b-6b2d-48fa-8cf6-6586d17ed8f0",
+                  roots: { "1456": "e26e3488-568a-46ba-b81c-25f8fe414508" },
+                },
+              ];
+              root.Bokeh.embed.embed_items_notebook(docs_json, render_items);
+            }
+            if (root.Bokeh !== undefined) {
+              embed_document(root);
+            } else {
+              var attempts = 0;
+              var timer = setInterval(
+                function (root) {
+                  if (root.Bokeh !== undefined) {
+                    clearInterval(timer);
+                    embed_document(root);
+                  } else {
+                    attempts++;
+                    if (attempts > 100) {
+                      clearInterval(timer);
+                      console.log(
+                        "Bokeh: ERROR: Unable to run BokehJS code because BokehJS library is missing"
+                      );
+                    }
+                  }
+                },
+                10,
+                root
+              );
+            }
+          })(window);
+        }
+        (function (root) {
+          setTimeout(function () {
+            console.warn("---");
+            root._bokeh_onload_callbacks.push(__aznb_plot);
+          }, 10);
+        })(window);
+      </script>
+    </div>
+  </body>
+</html>

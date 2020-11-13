@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="theme-color" content="#000000" />
+  </head>
+  <body>
+    <div id="root" style="position: relative; left: 100px; top: 100px;">
+      <iframe
+        frameborder="0"
+        style="
+          position: absolute;
+          overflow: hidden;
+          height: 960px;
+          width: 800px;
+          top: 0px;
+          left: 0px;
+          right: 0px;
+          bottom: 0px;
+        "
+        src="iframe-layers-content.html"
+        sandbox="allow-scripts"
+      ></iframe>
+      <div>
+        <div
+          style="
+            height: 100px;
+            width: 800px;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+          "
+        >
+          <h1>input 1</h1>
+        </div>
+        <div
+          style="
+            height: 100px;
+            width: 800px;
+            position: absolute;
+            top: 100px;
+            left: 0px;
+            pointer-events: none;
+          "
+        ></div>
+        <div
+          style="
+            height: 100px;
+            width: 800px;
+            position: absolute;
+            top: 200px;
+            left: 0px;
+          "
+        >
+          <h1>input 2</h1>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
